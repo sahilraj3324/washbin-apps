@@ -39,7 +39,7 @@ class AppConfig {
     return switch (environment) {
       AppEnvironment.development => _localBaseUrl,
       AppEnvironment.staging => 'https://washbin-api-staging.vercel.app',
-      AppEnvironment.production => 'https://washbin-api.vercel.app',
+      AppEnvironment.production => 'https://washbinapi.vercel.app/',
     };
   }
 

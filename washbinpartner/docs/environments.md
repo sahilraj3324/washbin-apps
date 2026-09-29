@@ -19,7 +19,7 @@ server.
 |---|---|
 | `development` | `http://10.0.2.2:3000` on Android, `http://localhost:3000` elsewhere |
 | `staging` | `https://washbin-api-staging.vercel.app` |
-| `production` | `https://washbin-api.vercel.app` |
+| `production` | `https://washbinapi.vercel.app/` |
 
 ## Running against a local API
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "461016502873",
+    "project_id": "washbin-e4662",
+    "storage_bucket": "washbin-e4662.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461016502873:android:f34714c8c57d54cd29d748",
+        "android_client_info": {
+          "package_name": "com.example.washbinapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA-PLl-SH-b7Vw65Y7RPYMbESpDw4Zoqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

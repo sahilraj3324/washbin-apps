@@ -33,23 +33,26 @@ class _HomeShellState extends State<HomeShell> {
 
   static const _tabs = [
     NavigationDestination(
-      icon: Icon(Icons.home_outlined),
-      selectedIcon: Icon(Icons.home_rounded),
+      icon: Icon(Icons.home_outlined, color: Color(0xFF6F737A)),
+      selectedIcon: Icon(Icons.home_rounded, color: AppTheme.ink),
       label: 'Home',
     ),
     NavigationDestination(
-      icon: Icon(Icons.home_repair_service_outlined),
-      selectedIcon: Icon(Icons.home_repair_service_rounded),
+      icon: Icon(Icons.home_repair_service_outlined, color: Color(0xFF6F737A)),
+      selectedIcon: Icon(
+        Icons.home_repair_service_rounded,
+        color: AppTheme.ink,
+      ),
       label: 'Services',
     ),
     NavigationDestination(
-      icon: Icon(Icons.receipt_long_outlined),
-      selectedIcon: Icon(Icons.receipt_long_rounded),
+      icon: Icon(Icons.receipt_long_outlined, color: Color(0xFF6F737A)),
+      selectedIcon: Icon(Icons.receipt_long_rounded, color: AppTheme.ink),
       label: 'Bookings',
     ),
     NavigationDestination(
-      icon: Icon(Icons.person_outline_rounded),
-      selectedIcon: Icon(Icons.person_rounded),
+      icon: Icon(Icons.person_outline_rounded, color: Color(0xFF6F737A)),
+      selectedIcon: Icon(Icons.person_rounded, color: AppTheme.ink),
       label: 'Profile',
     ),
   ];
@@ -74,6 +77,20 @@ class _HomeShellState extends State<HomeShell> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: _select,
+        backgroundColor: Colors.white,
+        indicatorColor: AppTheme.washbinYellow.withValues(alpha: 0.24),
+        surfaceTintColor: Colors.white,
+        shadowColor: AppTheme.black.withValues(alpha: 0.16),
+        elevation: 12,
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return TextStyle(
+            color: selected ? AppTheme.ink : const Color(0xFF6F737A),
+            fontSize: 13,
+            fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+            letterSpacing: 0,
+          );
+        }),
         destinations: _tabs,
       ),
     );

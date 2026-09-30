@@ -112,7 +112,7 @@ void main() {
 
     expect(backend.signInCalls.last['name'], 'Rahul Sharma');
     expect(find.text('Hi, Rahul'), findsOneWidget);
-    expect(find.text('What do you need?'), findsOneWidget);
+    expect(find.text('Fresh Laundry.\nVerified Care.'), findsOneWidget);
   });
 
   testWidgets('an existing session skips the OTP flow entirely', (
@@ -220,6 +220,6 @@ void main() {
 
     await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();
-    expect(find.text('What do you need?'), findsOneWidget);
+    expect(find.text('Fresh Laundry.\nVerified Care.'), findsOneWidget);
   });
 }

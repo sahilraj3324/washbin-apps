@@ -36,16 +36,30 @@ Future<AppServices> _signedIn(WidgetTester tester, FakeBackend backend) async {
   return services;
 }
 
+Future<void> _reveal(WidgetTester tester, String text) async {
+  await tester.scrollUntilVisible(
+    find.text(text),
+    520,
+    scrollable: find.byType(Scrollable).first,
+    maxScrolls: 12,
+  );
+  await tester.pumpAndSettle();
+}
+
 void main() {
   group('home', () {
     testWidgets('shows categories and popular services', (tester) async {
       await _signedIn(tester, FakeBackend());
 
+      await _reveal(tester, 'What do you need?');
       expect(find.text('What do you need?'), findsOneWidget);
+      await _reveal(tester, 'Home Cleaning');
       expect(find.text('Home Cleaning'), findsOneWidget);
       expect(find.text('Cooking'), findsOneWidget);
 
+      await _reveal(tester, 'Popular services');
       expect(find.text('Popular services'), findsOneWidget);
+      await _reveal(tester, 'Deep Cleaning');
       expect(find.text('Deep Cleaning'), findsOneWidget);
       expect(find.text('₹299'), findsOneWidget);
       expect(find.text('30 mins'), findsOneWidget);
@@ -76,6 +90,7 @@ void main() {
       await tester.tap(find.text('Try again'));
       await tester.pumpAndSettle();
 
+      await _reveal(tester, 'Home Cleaning');
       expect(find.text('Home Cleaning'), findsOneWidget);
     });
 
@@ -92,12 +107,13 @@ void main() {
       ];
 
       await tester.fling(
-        find.text('What do you need?'),
+        find.byType(CustomScrollView),
         const Offset(0, 400),
         1000,
       );
       await tester.pumpAndSettle();
 
+      await _reveal(tester, 'Plumbing');
       expect(find.text('Plumbing'), findsOneWidget);
     });
 
@@ -112,6 +128,7 @@ void main() {
     testWidgets('a category opens its own services', (tester) async {
       await _signedIn(tester, FakeBackend());
 
+      await _reveal(tester, 'Home Cleaning');
       await tester.tap(find.text('Home Cleaning'));
       await tester.pumpAndSettle();
 
@@ -126,6 +143,7 @@ void main() {
     ) async {
       await _signedIn(tester, FakeBackend()..services = []);
 
+      await _reveal(tester, 'Cooking');
       await tester.tap(find.text('Cooking'));
       await tester.pumpAndSettle();
 
@@ -135,6 +153,7 @@ void main() {
     testWidgets('a service opens its detail screen', (tester) async {
       await _signedIn(tester, FakeBackend());
 
+      await _reveal(tester, 'Deep Cleaning');
       await tester.tap(find.text('Deep Cleaning'));
       await tester.pumpAndSettle();
 
@@ -147,6 +166,7 @@ void main() {
     testWidgets('back returns to the list it came from', (tester) async {
       await _signedIn(tester, FakeBackend());
 
+      await _reveal(tester, 'Home Cleaning');
       await tester.tap(find.text('Home Cleaning'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Deep Cleaning'));
@@ -159,6 +179,7 @@ void main() {
 
       await tester.pageBack();
       await tester.pumpAndSettle();
+      await _reveal(tester, 'What do you need?');
       expect(find.text('What do you need?'), findsOneWidget);
     });
   });
@@ -167,6 +188,7 @@ void main() {
     testWidgets('Continue asks where, and books nothing', (tester) async {
       final backend = FakeBackend();
       await _signedIn(tester, backend);
+      await _reveal(tester, 'Deep Cleaning');
       await tester.tap(find.text('Deep Cleaning'));
       await tester.pumpAndSettle();
 
@@ -200,6 +222,7 @@ void main() {
         ...backend.services.where((row) => row['_id'] != 'svc-1'),
       ];
 
+      await _reveal(tester, 'Deep Cleaning');
       await tester.tap(find.text('Deep Cleaning'));
       await tester.pumpAndSettle();
 
@@ -221,6 +244,7 @@ void main() {
       await _signedIn(tester, backend);
 
       backend.catalogueFails = true;
+      await _reveal(tester, 'Deep Cleaning');
       await tester.tap(find.text('Deep Cleaning'));
       await tester.pumpAndSettle();
 

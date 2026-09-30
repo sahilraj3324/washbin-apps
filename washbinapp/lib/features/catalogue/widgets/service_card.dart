@@ -17,48 +17,56 @@ class ServiceCard extends StatelessWidget {
     return Material(
       color: Colors.white,
       borderRadius: BorderRadius.circular(8),
+      elevation: 2,
+      shadowColor: AppTheme.black.withValues(alpha: 0.14),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          constraints: const BoxConstraints(minHeight: 132),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppTheme.line),
+            border: Border.all(color: AppTheme.lightGrey),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              RemoteImage(
-                url: service.imageUrl ?? service.iconUrl,
-                fallbackIcon: Icons.cleaning_services_rounded,
-                width: 76,
-                height: 76,
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: RemoteImage(
+                  url: service.imageUrl ?? service.iconUrl,
+                  fallbackIcon: _fallbackIcon(service.name),
+                  width: 92,
+                  height: 92,
+                  iconSize: 42,
+                ),
               ),
-              const SizedBox(width: 14),
-              Expanded(
+              Padding(
+                padding: const EdgeInsets.only(right: 92),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       service.name,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: AppTheme.ink,
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0,
+                        height: 1.08,
                       ),
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 6),
                     Text(
                       service.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: AppTheme.muted,
-                        fontSize: 12,
+                        color: Color(0xFF777A81),
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         height: 1.3,
                       ),
@@ -69,7 +77,7 @@ class ServiceCard extends StatelessWidget {
                         Text(
                           service.priceLabel,
                           style: const TextStyle(
-                            color: AppTheme.red,
+                            color: AppTheme.washbinYellow,
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0,
@@ -108,5 +116,22 @@ class ServiceCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  static IconData _fallbackIcon(String name) {
+    final lower = name.toLowerCase();
+    if (lower.contains('wash') || lower.contains('laundry')) {
+      return Icons.local_laundry_service_rounded;
+    }
+    if (lower.contains('clean')) {
+      return Icons.cleaning_services_rounded;
+    }
+    if (lower.contains('cook')) {
+      return Icons.restaurant_rounded;
+    }
+    if (lower.contains('iron')) {
+      return Icons.iron_rounded;
+    }
+    return Icons.home_repair_service_rounded;
   }
 }

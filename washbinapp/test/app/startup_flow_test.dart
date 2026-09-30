@@ -43,7 +43,7 @@ void main() {
     );
 
     expect(find.text('Trusted help for every home.'), findsOneWidget);
-    expect(find.text('Send OTP'), findsNothing);
+    expect(find.text('Continue'), findsNothing);
     expect(find.text('What do you need?'), findsNothing);
 
     await _passSplash(tester);
@@ -55,8 +55,8 @@ void main() {
     );
     await _passSplash(tester);
 
-    expect(find.text('Login or sign up'), findsOneWidget);
-    expect(find.text('Send OTP'), findsOneWidget);
+    expect(find.text('Log in or Sign up'), findsOneWidget);
+    expect(find.text('Continue'), findsOneWidget);
     // The signed-in app is not merely hidden — it was never built.
     expect(find.text('What do you need?'), findsNothing);
   });
@@ -71,7 +71,7 @@ void main() {
     await _passSplash(tester);
 
     await tester.enterText(find.byType(TextFormField), '98765');
-    await tester.tap(find.text('Send OTP'));
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
     expect(find.text('Enter your 10-digit mobile number'), findsOneWidget);
@@ -83,11 +83,13 @@ void main() {
   ) async {
     final backend = FakeBackend();
     final phoneAuth = FakePhoneAuthService();
-    await tester.pumpWidget(WashbinApp(services: _services(backend, phoneAuth)));
+    await tester.pumpWidget(
+      WashbinApp(services: _services(backend, phoneAuth)),
+    );
     await _passSplash(tester);
 
     await tester.enterText(find.byType(TextFormField), '9876543210');
-    await tester.tap(find.text('Send OTP'));
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
     // The dial code is added before Firebase is asked for an SMS.
@@ -128,7 +130,7 @@ void main() {
     await _passSplash(tester);
 
     expect(find.text('Hi, Rahul'), findsOneWidget);
-    expect(find.text('Send OTP'), findsNothing);
+    expect(find.text('Continue'), findsNothing);
   });
 
   testWidgets('signing out returns to the phone screen', (tester) async {
@@ -150,7 +152,7 @@ void main() {
     // returns would strand the customer on "Signing out...".
     expect(services.session.status, SessionStatus.unauthenticated);
 
-    expect(find.text('Login or sign up'), findsOneWidget);
+    expect(find.text('Log in or Sign up'), findsOneWidget);
     expect(find.text('What do you need?'), findsNothing);
     expect(phoneAuth.signOutCount, 1);
   });
@@ -196,7 +198,7 @@ void main() {
     services.session.handleUnauthorized();
     await _settleSignOut(tester);
 
-    expect(find.text('Login or sign up'), findsOneWidget);
+    expect(find.text('Log in or Sign up'), findsOneWidget);
     expect(find.textContaining('session has expired'), findsOneWidget);
     expect(services.tokens.hasToken, isFalse);
   });

@@ -22,6 +22,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   bool _isSending = false;
+  bool _hasReferralCode = false;
   String? _errorMessage;
 
   PhoneAuthService get _phoneAuth => AppServicesScope.of(context).phoneAuth;
@@ -83,8 +84,14 @@ class _PhoneScreenState extends State<PhoneScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthScaffold(
-      title: 'Login or sign up',
-      subtitle: 'Book maids, cleaners, cooks, and home help.',
+      title: 'Clean clothes at your doorstep.',
+      subtitle: 'Schedule laundry, dry cleaning, and ironing in minutes.',
+      showSkip: true,
+      onSkip: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Log in to book a WashBin pickup.')),
+        );
+      },
       child: Form(
         key: _formKey,
         child: AutofillGroup(
@@ -92,24 +99,15 @@ class _PhoneScreenState extends State<PhoneScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
-                'Mobile number',
+                'Log in or Sign up',
                 style: TextStyle(
                   color: AppTheme.ink,
-                  fontSize: 17,
+                  fontSize: 24,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0,
                 ),
               ),
-              const SizedBox(height: 6),
-              const Text(
-                'We will text you a 6-digit code to confirm it.',
-                style: TextStyle(
-                  color: AppTheme.muted,
-                  fontWeight: FontWeight.w600,
-                  height: 1.35,
-                ),
-              ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 26),
               TextFormField(
                 controller: _phoneController,
                 enabled: !_isSending,
@@ -123,14 +121,40 @@ class _PhoneScreenState extends State<PhoneScreen> {
                 ],
                 onFieldSubmitted: (_) => _isSending ? null : _sendOtp(),
                 validator: _validatePhone,
-                decoration: const InputDecoration(
-                  labelText: 'Mobile number',
-                  prefixIcon: Icon(Icons.phone_rounded),
-                  prefixText: '$washbinDialCode  ',
-                  prefixStyle: TextStyle(
-                    color: AppTheme.ink,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                decoration: InputDecoration(
+                  hintText: 'Enter mobile number',
+                  hintStyle: const TextStyle(
+                    color: Color(0xFF9AA3B2),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0,
+                  ),
+                  prefixIcon: SizedBox(
+                    width: 66,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          washbinDialCode,
+                          style: TextStyle(
+                            color: AppTheme.ink,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 26,
+                          margin: const EdgeInsets.only(left: 12),
+                          color: AppTheme.line,
+                        ),
+                      ],
+                    ),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 66,
+                    minHeight: 54,
                   ),
                 ),
               ),
@@ -138,31 +162,93 @@ class _PhoneScreenState extends State<PhoneScreen> {
                 const SizedBox(height: 16),
                 AuthErrorText(message: _errorMessage!),
               ],
-              const SizedBox(height: 24),
-              FilledButton.icon(
+              const SizedBox(height: 16),
+              FilledButton(
                 onPressed: _isSending ? null : _sendOtp,
-                icon: _isSending
+                child: _isSending
                     ? const SizedBox(
                         width: 18,
                         height: 18,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          color: Colors.white,
+                          color: AppTheme.ink,
                         ),
                       )
-                    : const Icon(Icons.arrow_forward_rounded),
-                label: Text(_isSending ? 'Sending code...' : 'Send OTP'),
+                    : const Text('Continue'),
               ),
               const SizedBox(height: 18),
-              const Text(
-                'By continuing you agree to receive an SMS from Washbin. '
-                'Standard message rates may apply.',
+              InkWell(
+                onTap: _isSending
+                    ? null
+                    : () {
+                        setState(() => _hasReferralCode = !_hasReferralCode);
+                      },
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: _hasReferralCode,
+                        onChanged: _isSending
+                            ? null
+                            : (value) {
+                                setState(
+                                  () => _hasReferralCode = value ?? false,
+                                );
+                              },
+                        activeColor: AppTheme.royalBlue,
+                        side: const BorderSide(color: Color(0xFFCBD5E1)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Have a referral code?',
+                        style: TextStyle(
+                          color: Color(0xFF344054),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 26),
+              Text.rich(
+                TextSpan(
+                  text: 'By continuing, you agree to our ',
+                  children: [
+                    TextSpan(
+                      text: 'Terms of Service',
+                      style: const TextStyle(
+                        color: AppTheme.royalBlue,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppTheme.royalBlue,
+                      ),
+                    ),
+                    const TextSpan(text: ' & '),
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: const TextStyle(
+                        color: AppTheme.royalBlue,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppTheme.royalBlue,
+                      ),
+                    ),
+                  ],
+                ),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppTheme.muted,
                   fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  height: 1.4,
+                  fontWeight: FontWeight.w500,
+                  height: 1.45,
+                  letterSpacing: 0,
                 ),
               ),
             ],

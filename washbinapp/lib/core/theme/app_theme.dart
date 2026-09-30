@@ -3,22 +3,29 @@ import 'package:flutter/material.dart';
 class AppTheme {
   const AppTheme._();
 
-  static const red = Color(0xFFE01F2D);
-  static const darkRed = Color(0xFFA20F1B);
-  static const ink = Color(0xFF221516);
-  static const muted = Color(0xFF766668);
-  static const canvas = Color(0xFFFFF7F5);
-  static const line = Color(0xFFF0D8D8);
+  static const washbinYellow = Color(0xFFFFC400);
+  static const deepNavy = Color(0xFF071B3A);
+  static const black = Color(0xFF0B0D10);
+  static const offWhite = Color(0xFFF8FAFC);
+  static const royalBlue = Color(0xFF1257D6);
+  static const lightGrey = Color(0xFFE9EEF5);
+
+  static const red = washbinYellow;
+  static const darkRed = deepNavy;
+  static const ink = black;
+  static const muted = Color(0xFF647084);
+  static const canvas = offWhite;
+  static const line = lightGrey;
 
   static ThemeData get light {
     return ThemeData(
       useMaterial3: true,
       scaffoldBackgroundColor: canvas,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: red,
-        primary: red,
-        secondary: const Color(0xFFFFB13B),
-        surface: Colors.white,
+        seedColor: washbinYellow,
+        primary: washbinYellow,
+        secondary: royalBlue,
+        surface: offWhite,
         onSurface: ink,
       ),
       fontFamily: 'Roboto',
@@ -37,7 +44,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: red, width: 1.6),
+          borderSide: const BorderSide(color: washbinYellow, width: 1.6),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -53,8 +60,8 @@ class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(54),
-          backgroundColor: red,
-          foregroundColor: Colors.white,
+          backgroundColor: washbinYellow,
+          foregroundColor: ink,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           textStyle: const TextStyle(
             fontSize: 16,
